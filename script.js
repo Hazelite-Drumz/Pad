@@ -66,8 +66,8 @@ function displayResults(soundsList) {
   resultsDiv.innerHTML = ''; // Clear previous results
 
   soundsList.forEach(sound => {
-    // Construct the full URL based on the sound name field
-    const soundUrl = sound.name;
+    // Use the low-quality mp3 preview URL provided by Freesound API
+    const soundUrl = sound.previews ? sound.previews['preview-lq-mp3'] : null;
 
     // Check if the sound URL exists
     if (soundUrl) {
@@ -76,16 +76,19 @@ function displayResults(soundsList) {
       soundElement.innerHTML = `
         <p>${sound.name}</p>
         <audio controls>
-          <source src="${soundUrl}" type="audio/wav">
+          <source src="${soundUrl}" type="audio/mpeg">
         </audio>
         <button onclick="addToDrumPad('${soundUrl}')">Add to Drum Pad</button>
       `;
       resultsDiv.appendChild(soundElement);
     } else {
-      console.log(`Sound "${sound.name}" does not have a valid URL.`);
+      console.log(`Sound "${sound.name}" does not have a valid preview URL.`);
     }
   });
 }
+
+
+
 
 function addToDrumPad(soundUrl) {
   const padKey = prompt("Assign a key for this sound (e.g., Q, W, E, etc.):").toUpperCase();
