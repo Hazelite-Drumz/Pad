@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Online Drum Pad</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1>Online Drum Pad</h1>
+  
+  <div class="drum-pad">
+    <button class="pad" data-key="Q">Q</button>
+    <button class="pad" data-key="W">W</button>
+    <button class="pad" data-key="E">E</button>
+    <button class="pad" data-key="A">A</button>
+    <button class="pad" data-key="S">S</button>
+    <button class="pad" data-key="D">D</button>
+  </div>
+  
+  <div class="controls">
+    <button id="record">Record</button>
+    <a id="download" href="#">Download</a>
+  </div>
+
+  <div class="sound-search">
+    <input type="text" id="searchQuery" placeholder="Search for sounds...">
+    <button id="searchBtn">Search</button>
+  </div>
+  <div id="results"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
