@@ -54,17 +54,24 @@ window.onload = function () {
   });
 };
 
+
 // Function to fetch all sounds from the Freesound API
 function fetchAllSounds() {
-  const url = `https://freesound.org/apiv2/search/text/?query=&filter=type:wav&token=${apiKey}`;
+  const url = `https://freesound.org/apiv2/search/text/?query=&filter=type:wav`;
 
   fetch(url, {
     method: 'GET',
     headers: {
-      'Authorization': `Bearer ${apiKey}` // Use the correct API key
+      'Authorization': `Bearer ${apiKey}`, // Use Bearer authorization
+      'Content-Type': 'application/json'
     }
   })
-    .then(response => response.json())
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
     .then(data => {
       if (data && data.results) {
         soundsData = data.results;
