@@ -77,7 +77,8 @@ function fetchSoundsByTag(tag) {
     return;
   }
 
-  const url = `https://freesound.org/apiv2/search/text/?query=${tag}&filter=type:wav&token=${apiKey}`;
+
+  const url = `https://freesound.org/apiv2/search/text/?query=${tag}&filter=type:wav`;
 
   fetch(url, {
     method: 'GET',
