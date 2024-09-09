@@ -1,3 +1,4 @@
+
 const apiKey = 'qoA9eNdzJODSdWwHQKt6gzzUxA4SLILrLXSlyjpB';
 const pads = document.querySelectorAll('.pad');
 const recordBtn = document.getElementById('record');
@@ -40,28 +41,17 @@ window.addEventListener('keydown', (e) => {
   }
 });
 
-// Sound search function using Freesound API
-document.getElementById('searchBtn').addEventListener('click', function() {
-  const query = document.getElementById('searchQuery').value;
-  searchSounds(query);
-});
+// Function to fetch and display sounds by tag using Freesound API
+function fetchSoundsByTag(tag) {
+  const url = `https://freesound.org/apiv2/search/text/?query=${tag}&filter=type:wav&token=${apiKey}`;
 
-function searchSounds(query) {
-  const url = `https://freesound.org/apiv2/search/text/?query=${query}&token=${apiKey}`;
-  
   fetch(url)
     .then(response => response.json())
-    .then(data => {
-      console.log(data); // Inspect the entire response structure
-      if (data.results) {
-        displayResults(data.results); // Pass results to display function if it exists
-      } else {
-        console.error('No results found in API response.');
-      }
-    })
-    .catch(error => console.error('Error:', error));
+    .then(data => displayResults(data.results))
+    .catch(error => console.error('Error fetching sounds by tag:', error));
 }
 
+// Display the results in the UI
 function displayResults(soundsList) {
   resultsDiv.innerHTML = ''; // Clear previous results
 
@@ -69,7 +59,6 @@ function displayResults(soundsList) {
     // Use the low-quality mp3 preview URL provided by Freesound API
     const soundUrl = sound.previews ? sound.previews['preview-lq-mp3'] : null;
 
-    // Check if the sound URL exists
     if (soundUrl) {
       const soundElement = document.createElement('div');
       soundElement.className = 'sound-item';
@@ -82,25 +71,23 @@ function displayResults(soundsList) {
       `;
       resultsDiv.appendChild(soundElement);
     } else {
-      console.log(`Sound "${sound.name}" does not have a valid preview URL.`);
+      console.log(\`Sound "\${sound.name}" does not have a valid preview URL.\`);
     }
   });
 }
 
-
-
-
+// Assign sound to drum pad
 function addToDrumPad(soundUrl) {
   const padKey = prompt("Assign a key for this sound (e.g., Q, W, E, etc.):").toUpperCase();
   if (padKey && /^[A-Z]$/.test(padKey)) {
     sounds[padKey] = soundUrl;
-    alert(`Sound assigned to ${padKey}!`);
+    alert(\`Sound assigned to \${padKey}!\`);
   } else {
     alert("Please assign a valid key (A-Z).");
   }
 }
 
-// Recording logic (as before)
+// Recording logic
 recordBtn.addEventListener('click', () => {
   isRecording = !isRecording;
   recordBtn.textContent = isRecording ? 'Stop' : 'Record';
