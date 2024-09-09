@@ -14,6 +14,7 @@ window.onload = function () {
   recordBtn = document.getElementById('record');
   downloadBtn = document.getElementById('download');
   resultsDiv = document.getElementById('results');
+  const tagDropdown = document.getElementById('tagDropdown');
 
   // Drum pad click listener
   pads.forEach(pad => {
@@ -38,20 +39,27 @@ window.onload = function () {
 
     if (!isRecording) {
       // Stop recording and prepare audio download
-      let blob = new Blob(audioChunks, { type: 'audio/wav' });
+      let blob = new Blob(recordedAudio, { type: 'audio/wav' });
       downloadBtn.href = URL.createObjectURL(blob);
       downloadBtn.download = 'recording.wav';
     } else {
-      audioChunks = [];
+      recordedAudio = [];
     }
+  });
+
+
+  // Event listener for the dropdown tag selection
+  tagDropdown.addEventListener('change', function () {
+    fetchSoundsByTag(this.value);
   });
 };
 
 // Function to play sounds
 function playSound(key) {
   if (sounds[key]) {
-    const audio = new Audio(sounds[key]);
-    audio.crossOrigin = "anonymous"; // Allow cross-origin requests for external sounds
+    const audio = new Audio();
+    audio.src = sounds[key];
+    audio.crossOrigin = "anonymous"; // Allow cross-origin for sounds
     audio.play();
 
     if (isRecording) {
@@ -60,18 +68,40 @@ function playSound(key) {
   }
 }
 
+
+// Function to fetch and display sounds by tag using Freesound API
 // Function to fetch and display sounds by tag using Freesound API
 function fetchSoundsByTag(tag) {
+  if (!tag) {
+    resultsDiv.innerHTML = '<p>Please select a tag.</p>';
+    return;
+  }
+
   const url = `https://freesound.org/apiv2/search/text/?query=${tag}&filter=type:wav&token=${apiKey}`;
 
-  fetch(url)
-    .then(response => response.json())
-    .then(data => displayResults(data.results))
+  fetch(url, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${apiKey}` // Use Bearer authorization
+    }
+  })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      if (data && data.results && data.results.length > 0) {
+        displayResults(data.results);
+      } else {
+        resultsDiv.innerHTML = '<p>No sounds found for this tag.</p>';
+      }
+    })
     .catch(error => console.error('Error fetching sounds by tag:', error));
 }
 
-// Display the results in the UI
-// Function to display the results
+// Function to display the results in the UI
 function displayResults(soundsList) {
   resultsDiv.innerHTML = ''; // Clear previous results
 
@@ -96,12 +126,18 @@ function displayResults(soundsList) {
   });
 }
 
-
 // Function to assign sound to drum pad
 function addToDrumPad(soundUrl) {
   const padKey = prompt("Assign a key for this sound (e.g., Q, W, E, etc.):").toUpperCase();
   if (padKey && /^[A-Z]$/.test(padKey)) {
     sounds[padKey] = soundUrl;
+
+    // Update the UI to reflect the sound assignment
+    const padElement = document.querySelector(`.pad[data-key="${padKey}"]`);
+    if (padElement) {
+      padElement.innerText = padKey; // Update key label
+    }
+
     alert('Sound assigned to ' + padKey + '!');
   } else {
     alert("Please assign a valid key (A-Z).");
