@@ -1,237 +1,28 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Online Drum Pad</title>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hazelite's Online DrumPad</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Online Drum Pad</h1>
-  
-  <div class="drum-pad">
-    <button class="pad" data-key="Q">Q</button>
-    <button class="pad" data-key="W">W</button>
-    <button class="pad" data-key="E">E</button>
-    <button class="pad" data-key="A">A</button>
-    <button class="pad" data-key="S">S</button>
-    <button class="pad" data-key="D">D</button>
-  </div>
-  
-  <div class="controls">
-    <button id="record">Record</button>
-    <a id="download" href="#">Download</a>
-  </div>
+    <div class="container">
+        <h1>Hazelite DrumPad</h1>
 
-  <div class="sound-search">
-    <select id="tagDropdown" onchange="fetchSoundsByTag(this.value)">
-      <option value="">Select a Tag</option>
-      <option value="field-recording">Field Recording</option>
-<option value="multisample">Multisample</option>
-<option value="single-note">Single Note</option>
-<option value="drum">Drum</option>
-<option value="synthesizer">Synthesizer</option>
-<option value="loop">Loop</option>
-<option value="ambient">Ambient</option>
-<option value="synth">Synth</option>
-<option value="noise">Noise</option>
-<option value="percussion">Percussion</option>
-<option value="electronic">Electronic</option>
-<option value="ambience">Ambience</option>
-<option value="sound">Sound</option>
-<option value="voice">Voice</option>
-<option value="bass">Bass</option>
-<option value="music">Music</option>
-<option value="water">Water</option>
-<option value="metal">Metal</option>
-<option value="soundscape">Soundscape</option>
-<option value="nature">Nature</option>
-<option value="drums">Drums</option>
-<option value="atmosphere">Atmosphere</option>
-<option value="effect">Effect</option>
-<option value="beat">Beat</option>
-<option value="ambiance">Ambiance</option>
-<option value="hit">Hit</option>
-<option value="birds">Birds</option>
-<option value="fx">Fx</option>
-<option value="sample">Sample</option>
-<option value="foley">Foley</option>
-<option value="game">Game</option>
-<option value="dark">Dark</option>
-<option value="sfx">Sfx</option>
-<option value="sci-fi">Sci Fi</option>
-<option value="industrial">Industrial</option>
-<option value="piano">Piano</option>
-<option value="vocal">Vocal</option>
-<option value="glitch">Glitch</option>
-<option value="horror">Horror</option>
-<option value="guitar">Guitar</option>
-<option value="drone">Drone</option>
-<option value="samples">Samples</option>
-<option value="weird">Weird</option>
-<option value="snare">Snare</option>
-<option value="kick">Kick</option>
-<option value="city">City</option>
-<option value="machine">Machine</option>
-<option value="male">Male</option>
-<option value="space">Space</option>
-<option value="wind">Wind</option>
-<option value="recording">Recording</option>
-<option value="people">People</option>
-<option value="owi">Owi</option>
-<option value="wood">Wood</option>
-<option value="door">Door</option>
-<option value="electro">Electro</option>
-<option value="reverb">Reverb</option>
-<option value="background">Background</option>
-<option value="digital">Digital</option>
-<option value="female">Female</option>
-<option value="alien">Alien</option>
-<option value="dance">Dance</option>
-<option value="experimental">Experimental</option>
-<option value="pad">Pad</option>
-<option value="electric">Electric</option>
-<option value="traffic">Traffic</option>
-<option value="car">Car</option>
-<option value="processed">Processed</option>
-<option value="cinematic">Cinematic</option>
-<option value="free">Free</option>
-<option value="soundtrack">Soundtrack</option>
-<option value="rain">Rain</option>
-<option value="click">Click</option>
-<option value="close">Close</option>
-<option value="good-sounds">Good Sounds</option>
-<option value="neumann-u87">Neumann U87</option>
-<option value="human">Human</option>
-<option value="open">Open</option>
-<option value="compmusic">Compmusic</option>
-<option value="house">House</option>
-<option value="scary">Scary</option>
-<option value="street">Street</option>
-<option value="techno">Techno</option>
-<option value="acoustic">Acoustic</option>
-<option value="sound-design">Sound Design</option>
-<option value="creepy">Creepy</option>
-<option value="loops">Loops</option>
-<option value="short">Short</option>
-<option value="engine">Engine</option>
-<option value="carnatic">Carnatic</option>
-<option value="underground">Underground</option>
-<option value="film">Film</option>
-<option value="fender-chroma-polaris">Fender Chroma Polaris</option>
-<option value="impact">Impact</option>
-<option value="mridangam">Mridangam</option>
-<option value="indian-percussion">Indian Percussion</option>
-<option value="h4n-zoom">H4N Zoom</option>
-<option value="sm-58">Sm 58</option>
-<option value="icassp2013-dataset">Icassp2013 Dataset</option>
-<option value="iitm">Iitm</option>
-<option value="mridangam-stroke-dataset">Mridangam Stroke Dataset</option>
-<option value="analog">Analog</option>
-<option value="speech">Speech</option>
-<option value="bpm">Bpm</option>
-<option value="1-shot">1 Shot</option>
-<option value="bird">Bird</option>
-<option value="background-sound">Background Sound</option>
-<option value="vintage">Vintage</option>
-<option value="velocity">Velocity</option>
-<option value="general-noise">General Noise</option>
-<option value="train">Train</option>
-<option value="loopable">Loopable</option>
-<option value="computer">Computer</option>
-<option value="metallic">Metallic</option>
-<option value="walking">Walking</option>
-<option value="footsteps">Footsteps</option>
-<option value="shot">Shot</option>
-<option value="movie">Movie</option>
-<option value="bell">Bell</option>
-<option value="forest">Forest</option>
-<option value="rhythm">Rhythm</option>
-<option value="melody">Melody</option>
-<option value="atmospheric">Atmospheric</option>
-<option value="voices">Voices</option>
-<option value="stereo">Stereo</option>
-<option value="strings">Strings</option>
-<option value="hand">Hand</option>
-<option value="paper">Paper</option>
-<option value="glass">Glass</option>
-<option value="spooky">Spooky</option>
-<option value="crowd">Crowd</option>
-<option value="talk">Talk</option>
-<option value="mechanical">Mechanical</option>
-<option value="kitchen">Kitchen</option>
-<option value="spring">Spring</option>
-<option value="deep">Deep</option>
-<option value="distortion">Distortion</option>
-<option value="field">Field</option>
-<option value="english">English</option>
-<option value="plastic">Plastic</option>
-<option value="sounds">Sounds</option>
-<option value="woman">Woman</option>
-<option value="packs">Packs</option>
-<option value="one-shot">One Shot</option>
-<option value="trance">Trance</option>
-<option value="percussive">Percussive</option>
-<option value="instrument">Instrument</option>
-<option value="white-noise">White Noise</option>
-<option value="hard">Hard</option>
-<option value="motor">Motor</option>
-<option value="lo-fi">Lo Fi</option>
-<option value="drop">Drop</option>
-<option value="cars">Cars</option>
-<option value="night">Night</option>
-<option value="waves">Waves</option>
-<option value="clap">Clap</option>
-<option value="soundeffect">Soundeffect</option>
-<option value="strange">Strange</option>
-<option value="electronica">Electronica</option>
-<option value="storm">Storm</option>
-<option value="animal">Animal</option>
-<option value="radio">Radio</option>
-<option value="weather">Weather</option>
-<option value="lofi">Lofi</option>
-<option value="river">River</option>
-<option value="button">Button</option>
-<option value="monster">Monster</option>
-<option value="beep">Beep</option>
-<option value="steps">Steps</option>
-<option value="retro">Retro</option>
-<option value="thunder">Thunder</option>
-<option value="distorted">Distorted</option>
-<option value="gun">Gun</option>
-<option value="perc">Perc</option>
-<option value="summer">Summer</option>
-<option value="birdsong">Birdsong</option>
-<option value="one">One</option>
-<option value="sound-effect">Sound Effect</option>
-<option value="tom">Tom</option>
-<option value="girl">Girl</option>
-<option value="optical">Optical</option>
-<option value="air">Air</option>
-<option value="robot">Robot</option>
-<option value="rock">Rock</option>
-<option value="wooden">Wooden</option>
-<option value="analogue">Analogue</option>
-<option value="man">Man</option>
-<option value="loud">Loud</option>
-<option value="synthetic">Synthetic</option>
-<option value="artificial">Artificial</option>
-<option value="suspense">Suspense</option>
-<option value="120bpm">120Bpm</option>
-<option value="tone">Tone</option>
-<option value="talking">Talking</option>
-<option value="yamaha-cs-30l">Yamaha Cs 30L</option>
-<option value="abstract">Abstract</option>
-<option value="hum">Hum</option>
-<option value="pop">Pop</option>
-<option value="bottle">Bottle</option>
-<option value="sea">Sea</option>
-    </select>
-  </div>
-  
-  <div id="results"></div>
+        <!-- Move the sequencer above the drum pad -->
+        <div id="sequencer"></div>
 
-  <script src="script.js"></script>
+        <div class="drum-pad" id="drum-pad"></div>
+        <div class="controls">
+            <button id="record">Record</button>
+            <button id="download">Download</button>
+            <button id="clear">Clear</button>
+        </div>
+        <div class="sound-browser" id="sound-browser">
+            <!-- Search for sounds here -->
+        </div>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>

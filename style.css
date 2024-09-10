@@ -1,0 +1,183 @@
+/* General Styling */
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #1b1b1b;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+    color: #ffffff;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 20px auto;
+    text-align: center;
+    background-color: #222222;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease;
+}
+
+.container:hover {
+    transform: translateY(-5px);
+}
+
+h1 {
+    color: #ffffff;
+    font-size: 3rem;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+}
+
+/* Drum Pad Styling */
+.drum-pad {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 15px;
+    margin-top: 30px;
+}
+
+button {
+    padding: 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    background-color: #333333;
+    color: white;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+
+}
+
+button.active {
+    background-color: #f39c12;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+    transform: translateY(-3px);
+}
+
+button:hover {
+    background-color: #00fd03;
+    box-shadow: 0 8px 16px rgba(0, 255, 3, 0.5);
+    transform: translateY(-5px);
+}
+
+button:focus {
+    outline: none;
+    border: 2px solid #f39c12;
+}
+
+/* Control Buttons */
+.controls {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.controls button {
+    padding: 15px 30px;
+    background-color: #444444;
+    font-size: 18px;
+    border-radius: 8px;
+}
+
+.controls button:hover {
+    background-color: #ff9f43;
+}
+
+/* Sound Browser */
+.sound-browser {
+    margin-top: 20px;
+    background-color: rgba(105, 104, 104, 0.15);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+input{
+    background-color: #1b1b1b;
+    color:white;
+    margin:20px;
+    padding:20px;
+    font-size: 17px;
+    border:2px solid black;
+    border-radius:15px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+select{
+    background-color: black;
+    color:white;
+    padding:20px;
+    font-size: 17px;
+    border:2px solid black;
+    border-radius:15px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Sequencer Styling */
+#sequencer {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr); /* Horizontal sequencer grid */
+    gap: 8px;
+    margin-top: 30px;
+    justify-items: center;
+}
+
+.loop-column {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.loop-pad {
+    width: 50px;
+    height: 50px;
+    background-color: #333333;
+    border-radius: 8px;
+    border: 2px solid #595959;
+    margin: 0;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.loop-pad:hover {
+    transform: translateY(-4px);
+    background-color: #444444;
+    border-color: #888888;
+}
+
+.loop-pad[data-active="true"] {
+    background-color: #4caf50;
+    box-shadow: 0 4px 8px rgba(0, 255, 0, 0.3);
+    transform: translateY(-2px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+
+    .drum-pad {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+
+    button {
+        padding:20px;
+        font-size: 17px;
+        border:2px solid white;
+        border-radius:15px;
+    }
+
+    #sequencer {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
