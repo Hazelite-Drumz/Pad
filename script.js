@@ -56,6 +56,7 @@ window.onload = function () {
 
 
 // Function to fetch all sounds from the Freesound API
+// Modify the function to fetch WAV files instead of previews
 function fetchAllSounds() {
   const url = `https://freesound.org/apiv2/search/text/?query=&filter=type:wav`;
 
@@ -75,7 +76,7 @@ function fetchAllSounds() {
     .then(data => {
       if (data && data.results) {
         soundsData = data.results;
-        displayResults(soundsData); // Display all sounds initially
+        displayResults(soundsData); // Display all sounds
       } else {
         resultsDiv.innerHTML = '<p>No sounds found.</p>';
       }
@@ -83,29 +84,30 @@ function fetchAllSounds() {
     .catch(error => console.error('Error fetching sounds:', error));
 }
 
-// Function to display all fetched sounds
+// Function to display all fetched sounds (using WAV files directly)
 function displayResults(soundsList) {
   resultsDiv.innerHTML = ''; // Clear previous results
 
   soundsList.forEach(sound => {
-    const soundUrl = sound.previews ? sound.previews['preview-lq-mp3'] : null;
+    const wavUrl = sound.previews ? sound.previews['preview-hq-wav'] : sound.download; // Use HQ WAV or download URL
 
-    if (soundUrl) {
+    if (wavUrl) {
       const soundElement = document.createElement('div');
       soundElement.className = 'sound-item';
       soundElement.innerHTML = `
         <p>${sound.name}</p>
         <audio controls>
-          <source src="${soundUrl}" type="audio/mpeg">
+          <source src="${wavUrl}" type="audio/wav">
         </audio>
-        <button onclick="addToDrumPad('${soundUrl}')">Add to Drum Pad</button>
+        <button onclick="addToDrumPad('${wavUrl}')">Add to Drum Pad</button>
       `;
       resultsDiv.appendChild(soundElement);
     } else {
-      console.log(`Sound "${sound.name}" does not have a valid preview URL.`);
+      console.log(`Sound "${sound.name}" does not have a valid WAV URL.`);
     }
   });
 }
+
 
 // Function to filter sounds based on tag
 function filterSoundsByTag(tag) {
