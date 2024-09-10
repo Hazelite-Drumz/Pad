@@ -1,12 +1,14 @@
 const FREESOUNDS_API_KEY = 'qoA9eNdzJODSdWwHQKt6gzzUxA4SLILrLXSlyjpB';
 const clientId = 'k4GwXmkPAGXRJIlnNjNm'; // Replace with your Freesound client ID
 const clientSecret = 'qoA9eNdzJODSdWwHQKt6gzzUxA4SLILrLXSlyjpB'; // Replace with your Freesound client secret
-const redirectUri = 'https://freesound.org/home/app_permissions/permission_granted/'; // Replace with your OAuth redirect URI
+const redirectUri = 'https://freesound.org/home/app_permissions/permission_granted/';
 const FREESOUNDS_API_URL = 'https://freesound.org/apiv2/search/text/';
 const FREESOUNDS_DOWNLOAD_URL = 'https://freesound.org/apiv2/sounds/';
 let accessToken = '';
 let currentPreviewAudio = null;
-
+let intervalId;  // Store interval for the sequencer loop
+let bpm = 120;   // Default BPM
+let volume = 0.5; // Default volume
 
 document.addEventListener('DOMContentLoaded', () => {
     const drumPad = document.getElementById('drum-pad');
@@ -16,6 +18,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const soundBrowser = document.getElementById('sound-browser');
     const keySelection = document.createElement('select'); // Dropdown for key selection
     const sequencer = document.getElementById('sequencer');
+    const bpmInput = document.getElementById('bpmInput');  // BPM slider
+    const bpmDisplay = document.getElementById('bpmDisplay');  // BPM number display
+    const volumeSlider = document.getElementById('volumeSlider');  // Volume slider
     let audioCtx;
     const keys = ['q', 'w', 'e', 'r', 'u', 'i', 'o', 'p']; // Keys for the drum pad
     const loopLength = 8; // Number of steps in the sequencer
@@ -91,10 +96,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     createSequencer(); // Initialize sequencer
 
-    // Loop through the sequencer and play active pads
+    // Loop through the sequencer and play active pads based on BPM
     function loopSequence() {
         let step = 0;
-        setInterval(() => {
+        clearInterval(intervalId);  // Clear previous loop
+        const interval = (60 / bpm) * 1000;  // Calculate interval based on BPM
+
+        intervalId = setInterval(() => {
             const columns = document.querySelectorAll('.loop-column');
             columns.forEach((col, idx) => {
                 const pads = col.children;
@@ -107,51 +115,53 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             });
             step = (step + 1) % loopLength;
-        }, 500); // Each beat lasts 500ms
+        }, interval);
     }
     loopSequence(); // Start looping
 
     // Play the sound using the assigned sound URL and light up the button
-    // Play the sound using the assigned sound URL and light up the button
-    // Play the sound using the assigned sound URL and light up the button
     function playSound(url, button = null, isPreview = false) {
-    if (!url) return;
+        if (!url) return;
 
-    // Stop the currently playing preview if it's a preview sound
-    if (isPreview && currentPreviewAudio) {
-        currentPreviewAudio.pause();
-        currentPreviewAudio.currentTime = 0;
-    }
-
-    // Create a new Audio object for each sound
-    const audio = new Audio(url);
-
-    if (isPreview) {
-        currentPreviewAudio = audio;  // Track the current preview audio
-    }
-
-    if (button) {
-        button.classList.add('active');  // Add "active" class to light up the button
-    }
-
-    // Play the sound
-    audio.play().catch((error) => {
-        console.error("Error playing sound:", error);
-    });
-
-    // Add an event listener to remove the 'active' class after the sound finishes playing
-    audio.addEventListener('ended', () => {
-        if (button) {
-            button.classList.remove('active');  // Remove "active" class when sound ends
+        // Stop the currently playing preview if it's a preview sound
+        if (isPreview && currentPreviewAudio) {
+            currentPreviewAudio.pause();
+            currentPreviewAudio.currentTime = 0;
         }
+
+        // Create a new Audio object for each sound
+        const audio = new Audio(url);
+        audio.volume = volumeSlider.value; // Apply the current volume from the slider
+
+        if (isPreview) {
+            currentPreviewAudio = audio;  // Track the current preview audio
+        }
+
+        if (button) {
+            button.classList.add('active');  // Add "active" class to light up the button
+        }
+
+        // Play the sound
+        audio.play().catch((error) => {
+            console.error("Error playing sound:", error);
+        });
+
+        // Add an event listener to remove the 'active' class after the sound finishes playing
+        audio.addEventListener('ended', () => {
+            if (button) {
+                button.classList.remove('active');  // Remove "active" class when sound ends
+            }
+        });
+    }
+
+    // Event listener for BPM slider
+    bpmInput.addEventListener('input', (e) => {
+        bpm = e.target.value;
+        bpmDisplay.value = bpm; // Update BPM display
+        loopSequence(); // Restart sequencer loop with new BPM
     });
-}
-
-
-
 
     // Fetch sounds from Freesound API
-    // Fetch sound using the Freesound API (ensure valid access token is used)
     function fetchSounds(query) {
         const url = `${FREESOUNDS_API_URL}?token=${FREESOUNDS_API_KEY}&query=${query}&fields=name,previews`;
 
@@ -171,8 +181,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     }
 
-
-    // Display sounds from the API in the sound browser
     // Display sounds from the API in the sound browser
     function displaySounds(sounds) {
         soundBrowser.innerHTML = '';  // Clear previous results
@@ -211,7 +219,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 soundItem.appendChild(noPreview);
             }
 
-
             const assignButton = document.createElement('button');
             assignButton.textContent = 'Assign';
             assignButton.addEventListener('click', () => assignSoundToPad(wavUrl)); // Use the preview URL
@@ -221,7 +228,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-// Assign the selected sound to the chosen drum pad button
+    // Assign the selected sound to the chosen drum pad button
     function assignSoundToPad(url) {
         const selectedKey = keySelection.value;  // Get the selected key from the dropdown
         const selectedButton = drumPad.querySelector(`button[data-key="${selectedKey}"]`);  // Find the corresponding button
@@ -232,7 +239,6 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Sound URL or button is missing');
         }
     }
-
 
     // Fetch the .wav file URL for a sound using its ID
     function getWavFile(soundId) {

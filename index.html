@@ -8,21 +8,33 @@
 </head>
 <body>
     <div class="container">
-        <h1>Hazelite DrumPad</h1>
+    <h1>Hazelite DrumPad</h1>
 
-        <!-- Move the sequencer above the drum pad -->
-        <div id="sequencer"></div>
+    <!-- Move the sequencer above the drum pad -->
+    <div id="sequencer"></div>
 
-        <div class="drum-pad" id="drum-pad"></div>
-        <div class="controls">
-            <button id="record">Record</button>
-            <button id="download">Download</button>
-            <button id="clear">Clear</button>
-        </div>
-        <div class="sound-browser" id="sound-browser">
-            <!-- Search for sounds here -->
+    <div class="drum-pad" id="drum-pad"></div>
+
+    <div class="controls">
+        <button id="record">Record</button>
+        <button id="download">Download</button>
+        <button id="clear">Clear</button>
+
+        <!-- BPM and Volume sliders here under the buttons -->
+        <div class="sliders">
+            <label for="bpmInput">BPM:</label>
+            <input type="range" id="bpmInput" min="60" max="200" value="120" />
+            <input type="number" id="bpmDisplay" value="120" disabled />
+            <label for="volumeSlider">Volume:</label>
+            <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="1" />
         </div>
     </div>
+
+    <div class="sound-browser" id="sound-browser">
+        <!-- Search for sounds here -->
+    </div>
+</div>
+
     <script src="script.js"></script>
 </body>
 </html>
