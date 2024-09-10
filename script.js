@@ -5,6 +5,8 @@ const redirectUri = 'https://freesound.org/home/app_permissions/permission_grant
 const FREESOUNDS_API_URL = 'https://freesound.org/apiv2/search/text/';
 const FREESOUNDS_DOWNLOAD_URL = 'https://freesound.org/apiv2/sounds/';
 let accessToken = '';
+let currentPreviewAudio = null;
+
 
 document.addEventListener('DOMContentLoaded', () => {
     const drumPad = document.getElementById('drum-pad');
@@ -112,28 +114,39 @@ document.addEventListener('DOMContentLoaded', () => {
     // Play the sound using the assigned sound URL and light up the button
     // Play the sound using the assigned sound URL and light up the button
     // Play the sound using the assigned sound URL and light up the button
-    function playSound(url, button = null) {
-        if (!url) return;
+    function playSound(url, button = null, isPreview = false) {
+    if (!url) return;
 
-        // Create a new Audio object for each sound
-        const audio = new Audio(url);
-
-        if (button) {
-            button.classList.add('active');  // Add "active" class to light up the button
-        }
-
-        // Play the sound
-        audio.play().catch((error) => {
-            console.error("Error playing sound:", error);
-        });
-
-        // Add an event listener to remove the 'active' class after the sound finishes playing
-        audio.addEventListener('ended', () => {
-            if (button) {
-                button.classList.remove('active');  // Remove "active" class when sound ends
-            }
-        });
+    // Stop the currently playing preview if it's a preview sound
+    if (isPreview && currentPreviewAudio) {
+        currentPreviewAudio.pause();
+        currentPreviewAudio.currentTime = 0;
     }
+
+    // Create a new Audio object for each sound
+    const audio = new Audio(url);
+
+    if (isPreview) {
+        currentPreviewAudio = audio;  // Track the current preview audio
+    }
+
+    if (button) {
+        button.classList.add('active');  // Add "active" class to light up the button
+    }
+
+    // Play the sound
+    audio.play().catch((error) => {
+        console.error("Error playing sound:", error);
+    });
+
+    // Add an event listener to remove the 'active' class after the sound finishes playing
+    audio.addEventListener('ended', () => {
+        if (button) {
+            button.classList.remove('active');  // Remove "active" class when sound ends
+        }
+    });
+}
+
 
 
 
@@ -190,13 +203,14 @@ document.addEventListener('DOMContentLoaded', () => {
             if (wavUrl) {
                 const previewButton = document.createElement('button');
                 previewButton.textContent = 'Preview';
-                previewButton.addEventListener('click', () => playSound(wavUrl)); // Play the correct preview
+                previewButton.addEventListener('click', () => playSound(wavUrl, null, true)); // Pass isPreview as true
                 soundItem.appendChild(previewButton);
             } else {
                 const noPreview = document.createElement('span');
                 noPreview.textContent = 'No Preview';
                 soundItem.appendChild(noPreview);
             }
+
 
             const assignButton = document.createElement('button');
             assignButton.textContent = 'Assign';
